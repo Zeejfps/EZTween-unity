@@ -66,7 +66,14 @@ namespace ENVCode
         private Action m_OnComplete;
 
         public float Progress { get; private set; }
-        public float Duration { get; private set; }
+
+        private float _duration;
+        public float Duration {
+            get { return _duration; }
+            private set {
+                _duration = Math.Max(value, 0);
+            }
+        }
         public bool Completed { get; private set; }
         public bool Playing { get; private set; }
         public bool Paused { get; private set; }
