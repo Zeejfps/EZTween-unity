@@ -52,7 +52,7 @@ namespace ENVCode
             List<Tween> copy = new List<Tween>(tweensSet);
             foreach (Tween tween in copy) {
                 tween.Tick(Time.deltaTime);
-                if (tween.Completed) {
+                if (tween.Stopped) {
                     tweensSet.Remove(tween);
                 }
             }
@@ -63,7 +63,9 @@ namespace ENVCode
     {
         private Func<float, float> m_InterpolationFunc;
         private Action<float> m_OnUpdate;
+        private Action m_OnPause;
         private Action m_OnComplete;
+        private Action m_OnStop;
 
         public float Progress { get; private set; }
 
@@ -74,9 +76,13 @@ namespace ENVCode
                 _duration = Math.Max(value, 0);
             }
         }
-        public bool Completed { get; private set; }
         public bool Playing { get; private set; }
-        public bool Paused { get; private set; }
+        public bool Stopped {
+            get { return !Playing; }
+        }
+        public bool Paused {
+            get { return !Playing && !Stopped; }
+        }
 
         public Tween(Func<float, float> interpolationFunc, float duration, Action<float> onUpdate)
         {
@@ -88,71 +94,80 @@ namespace ENVCode
         public void Restart()
         {
             Progress = 0f;
-            Completed = false;
             Playing = false;
             Play();
         }
 
         public void Play()
         {
-            if (Playing || Completed)
+            if (Playing)
                 return;
 
-            Paused = false;
             Playing = true;
             EZTween.Play(this);
         }
 
         public void Play(object key)
         {
-            if (Playing || Completed)
+            if (Playing)
                 return;
 
-            Paused = false;
             Playing = true;
             EZTween.Play(key, this);
         }
 
         public void Pause()
         {
-            if (Playing)
-                Paused = true;
+            if (!Playing)
+                return;
+
+            Playing = false;
+            if (m_OnPause != null)
+                m_OnPause.Invoke();
         }
 
         public void Stop()
         {
-            Stop(false);
-        }
-
-        public void Stop(bool triggerOnComplete)
-        {
-            if (!Playing || Completed)
+            if (!Playing)
                 return;
 
             Progress = 1f;
             Playing = false;
-            Paused = false;
-            Completed = true;
-            if (triggerOnComplete && m_OnComplete != null)
-                m_OnComplete.Invoke();
+            if (m_OnStop != null)
+                m_OnStop.Invoke();
         }
 
         internal void Tick(float dt)
         {
-            if (Completed || Paused)
+            if (!Playing)
                 return;
 
             Progress += dt;
             float value = m_InterpolationFunc.Invoke(Progress / Duration);
             m_OnUpdate.Invoke(value);
             if (Progress >= Duration) {
-                Stop(true);
+                if (m_OnComplete != null) {
+                    m_OnComplete.Invoke();
+                }
+                Stop();
             }
+        }
+
+        public Tween OnPause(Action onPause)
+        {
+            m_OnPause = onPause;
+            return this;
         }
 
         public Tween OnComplete(Action onComplete)
         {
             m_OnComplete = onComplete;
+            return this;
+        }
+
+        public Tween OnStop(Action onStop)
+        {
+            m_OnStop = onStop;
             return this;
         }
     } 
