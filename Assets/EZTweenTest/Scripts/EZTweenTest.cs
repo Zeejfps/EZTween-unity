@@ -42,8 +42,8 @@ public class EZTweenTest : MonoBehaviour
             openTween.Play();
 
             EZTween.QuadraticInOut(10f, t => {
-               
-            }).Play();
+                
+            }).Play("ID");
         }
     }
 }

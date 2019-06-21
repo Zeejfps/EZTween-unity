@@ -28,18 +28,32 @@ namespace ENVCode
 
         public static void Play(Tween tween)
         {
-            Instance.tweens.Add(tween);
+            Instance.tweensSet.Add(tween);
         }
 
-        private HashSet<Tween> tweens = new HashSet<Tween>();
+        public static void Play(object key, Tween tween)
+        {
+            if (Instance.tweensDict.ContainsKey(key)) {
+                Tween prev = Instance.tweensDict[key];
+                if (prev.Playing) prev.Stop();
+                Instance.tweensDict[key] = tween;
+            }
+            else {
+                Instance.tweensDict.Add(key, tween);
+            }
+            Instance.tweensSet.Add(tween);
+        }
+
+        private HashSet<Tween> tweensSet = new HashSet<Tween>();
+        private Dictionary<object, Tween> tweensDict = new Dictionary<object, Tween>();
 
         private void Update()
         {
-            List<Tween> copy = new List<Tween>(tweens);
+            List<Tween> copy = new List<Tween>(tweensSet);
             foreach (Tween tween in copy) {
                 tween.Tick(Time.deltaTime);
                 if (tween.Completed) {
-                    tweens.Remove(tween);
+                    tweensSet.Remove(tween);
                 }
             }
         }
@@ -80,6 +94,16 @@ namespace ENVCode
             Paused = false;
             Playing = true;
             EZTween.Play(this);
+        }
+
+        public void Play(object key)
+        {
+            if (Playing || Completed)
+                return;
+
+            Paused = false;
+            Playing = true;
+            EZTween.Play(key, this);
         }
 
         public void Pause()
