@@ -3,7 +3,7 @@
 EZTween is a simple tweening plugin for Unity. I hope to continue expanding this library and add new features with time.
 
 # Getting Started
-EZTween is located inside a ENVCode namespace
+EZTween is located inside the ENVCode.EZTween namespace
 ```csharp
 using ENVCode.EZTween;
 ```
