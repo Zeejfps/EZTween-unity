@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using ENVCode;
+using ENVCode.EZTween;
 
 public class EZTweenTest : MonoBehaviour
 {

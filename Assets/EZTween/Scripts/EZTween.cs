@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace ENVCode
+namespace ENVCode.EZTween
 {
     public partial class EZTween : MonoBehaviour
     {
-        private static EZTween s_Instance;
+        #region Static
+        /// <summary>
+        /// Singleton instance of this class.
+        /// </summary>
+        static EZTween s_Instance;
         public static EZTween Instance {
             get {
                 if (s_Instance == null) {
@@ -16,6 +19,10 @@ namespace ENVCode
             }
         }
 
+        /// <summary>
+        /// Initializes the EZTween GameObject.
+        /// Creates a EZTween GameObject with hideFlags set to HideAndDontSave.
+        /// </summary>
         public static void Init()
         {
             if (s_Instance != null)
@@ -26,149 +33,58 @@ namespace ENVCode
             s_Instance = obj.AddComponent<EZTween>();
         }
 
+        /// <summary>
+        /// Plays a given tween.
+        /// The tween is added to a HashSet and then updated every frame.
+        /// </summary>
+        /// <param name="tween"></param>
         public static void Play(Tween tween)
         {
-            Instance.tweensSet.Add(tween);
+            Instance.m_TweenSet.Add(tween);
         }
 
+        /// <summary>
+        /// Plays a tween that can be retrieved via the key object.
+        /// If the key already exists that means a tween is already playing and will be stoped before new tween is played.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="tween"></param>
         public static void Play(object key, Tween tween)
         {
-            if (Instance.tweensDict.ContainsKey(key)) {
-                Tween prev = Instance.tweensDict[key];
+            if (Instance.m_TweenDict.ContainsKey(key)) {
+                Tween prev = Instance.m_TweenDict[key];
                 if (prev.Playing) prev.Stop();
-                Instance.tweensDict[key] = tween;
+                Instance.m_TweenDict[key] = tween;
             }
             else {
-                Instance.tweensDict.Add(key, tween);
+                Instance.m_TweenDict.Add(key, tween);
             }
-            Instance.tweensSet.Add(tween);
+            Instance.m_TweenSet.Add(tween);
         }
+        #endregion
 
-        private HashSet<Tween> tweensSet = new HashSet<Tween>();
-        private Dictionary<object, Tween> tweensDict = new Dictionary<object, Tween>();
+        #region Properties
+        List<Tween> m_TweenList = new List<Tween>();
+        HashSet<Tween> m_TweenSet = new HashSet<Tween>();
+        Dictionary<object, Tween> m_TweenDict = new Dictionary<object, Tween>();
+        #endregion
 
-        private void Update()
+        #region Unity Callbacks
+        void Update()
         {
-            List<Tween> copy = new List<Tween>(tweensSet);
-            foreach (Tween tween in copy) {
+            // Clear the tween list
+            m_TweenList.Clear();
+            // Add the set to the list so we can iterate over it
+            m_TweenList.AddRange(m_TweenSet);
+
+            // Loop over all the tweens in our set and update them
+            foreach (Tween tween in m_TweenList) {
                 tween.Tick(Time.deltaTime);
                 if (tween.Stopped) {
-                    tweensSet.Remove(tween);
+                    m_TweenSet.Remove(tween);
                 }
             }
         }
-    }
-
-    public class Tween
-    {
-        private Func<float, float> m_InterpolationFunc;
-        private Action<float> m_OnUpdate;
-        private Action m_OnPause;
-        private Action m_OnComplete;
-        private Action m_OnStop;
-
-        public float Progress { get; private set; }
-
-        private float _duration;
-        public float Duration {
-            get { return _duration; }
-            private set {
-                _duration = Math.Max(value, 0);
-            }
-        }
-        public bool Playing { get; private set; }
-        public bool Stopped {
-            get { return !Playing; }
-        }
-        public bool Paused {
-            get { return !Playing && !Stopped; }
-        }
-
-        public Tween(Func<float, float> interpolationFunc, float duration, Action<float> onUpdate)
-        {
-            m_InterpolationFunc = interpolationFunc;
-            m_OnUpdate = onUpdate;
-            Duration = duration;
-        }
-
-        public void Restart()
-        {
-            Progress = 0f;
-            Playing = false;
-            Play();
-        }
-
-        public void Play()
-        {
-            if (Playing)
-                return;
-
-            Playing = true;
-            EZTween.Play(this);
-        }
-
-        public void Play(object key)
-        {
-            if (Playing)
-                return;
-
-            Playing = true;
-            EZTween.Play(key, this);
-        }
-
-        public void Pause()
-        {
-            if (!Playing)
-                return;
-
-            Playing = false;
-            if (m_OnPause != null)
-                m_OnPause.Invoke();
-        }
-
-        public void Stop()
-        {
-            if (!Playing)
-                return;
-
-            Progress = 1f;
-            Playing = false;
-            if (m_OnStop != null)
-                m_OnStop.Invoke();
-        }
-
-        internal void Tick(float dt)
-        {
-            if (!Playing)
-                return;
-
-            Progress += dt;
-            float value = m_InterpolationFunc.Invoke(Progress / Duration);
-            m_OnUpdate.Invoke(value);
-            if (Progress >= Duration) {
-                if (m_OnComplete != null) {
-                    m_OnComplete.Invoke();
-                }
-                Stop();
-            }
-        }
-
-        public Tween OnPause(Action onPause)
-        {
-            m_OnPause = onPause;
-            return this;
-        }
-
-        public Tween OnComplete(Action onComplete)
-        {
-            m_OnComplete = onComplete;
-            return this;
-        }
-
-        public Tween OnStop(Action onStop)
-        {
-            m_OnStop = onStop;
-            return this;
-        }
+        #endregion
     } 
 }

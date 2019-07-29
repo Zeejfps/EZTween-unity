@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using ENVCode;
+using ENVCode.EZTween;
 
 [RequireComponent(typeof(RectTransform))]
 public class Example : MonoBehaviour
@@ -15,20 +15,28 @@ public class Example : MonoBehaviour
         }
     }
 
-    private Tween m_OpenTween;
+    // A reference to our Tween object so we can reuse it
+    Tween m_OpenTween;
 
-    private void Awake()
+    void Awake()
     {
+        // Save our start position
         Vector2 startPos = RectTransform.anchoredPosition;
+
+        // Save our end position
         Vector2 endPos = new Vector2(startPos.x, startPos.y + 300f);
+
+        // Create a QuadraticInOut Tween
         m_OpenTween = EZTween.QuadraticInOut(m_MoveDuration, t => {
+            // On every update we lerp our position based on the t
             RectTransform.anchoredPosition = Vector2.Lerp(startPos, endPos, t);
         }).OnComplete(() => {
+            // When the Tween is done, we move back to the start position
             RectTransform.anchoredPosition = startPos;
         });
     }
 
-    private void Update()
+    void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
             m_OpenTween.Restart();
