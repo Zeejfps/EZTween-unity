@@ -5,6 +5,7 @@ using ENVCode.EZTween;
 public class Example : MonoBehaviour
 {
     [SerializeField] float m_MoveDuration = 0.5f;
+    [SerializeField] AnimationCurve m_Curve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
 
     private RectTransform _rectTransform;
     public RectTransform RectTransform {
@@ -26,6 +27,7 @@ public class Example : MonoBehaviour
         // Save our end position
         Vector2 endPos = new Vector2(startPos.x, startPos.y + 300f);
 
+        /*
         // Create a QuadraticInOut Tween
         m_OpenTween = EZTween.QuadraticInOut(m_MoveDuration, t => {
             // On every update we lerp our position based on the t
@@ -34,6 +36,17 @@ public class Example : MonoBehaviour
             // When the Tween is done, we move back to the start position
             RectTransform.anchoredPosition = startPos;
         });
+        //*/
+
+        m_OpenTween = EZTween.AnimationCurve(m_Curve, m_MoveDuration, t =>
+        {
+            // On every update we lerp our position based on the t
+            RectTransform.anchoredPosition = Vector2.LerpUnclamped(startPos, endPos, t);
+        }).OnComplete(() => {
+            // When the Tween is done, we move back to the start position
+            RectTransform.anchoredPosition = startPos;
+        });
+
     }
 
     void Update()

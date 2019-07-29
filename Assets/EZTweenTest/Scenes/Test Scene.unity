@@ -162,7 +162,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44b0d0ca7fcc14a4180ec93b9209daa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MoveDuration: 0.5
+  m_MoveDuration: 1
+  m_Curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.30081487
+      value: 1.9008092
+      inSlope: 0.80122995
+      outSlope: -5.56021
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.32257774
+      outWeight: 0.07628442
+    - serializedVersion: 3
+      time: 0.6563311
+      value: 0.5534725
+      inSlope: 0.07917491
+      outSlope: 4.7005954
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.23284969
+      outWeight: 0.17391372
+    - serializedVersion: 3
+      time: 0.8243968
+      value: 1.1044152
+      inSlope: 0.14702222
+      outSlope: -1.9098381
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.9706221
+      outWeight: 0.23917556
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &263281769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,49 +251,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 263281766}
   m_CullTransparentMesh: 0
---- !u!1 &290623947
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 290623949}
-  - component: {fileID: 290623948}
-  m_Layer: 0
-  m_Name: '[EZ Tween Test Script]'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
---- !u!114 &290623948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 290623947}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bea0543615e4c742a283444640e9fcb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &290623949
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 290623947}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,7 +331,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &559612030
 GameObject:
@@ -417,7 +425,7 @@ RectTransform:
   m_Children:
   - {fileID: 263281767}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -488,5 +496,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
