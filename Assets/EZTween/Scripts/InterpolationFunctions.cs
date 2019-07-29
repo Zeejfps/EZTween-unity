@@ -66,18 +66,18 @@ namespace ENVCode.EZTween
             return new Tween(curve.Evaluate, duration, onUpdate);
         }
 
-        private static float EaseIn(float t, int power)
+        static float EaseIn(float t, int power)
         {
             return Mathf.Pow(t, power);
         }
 
-        private static float EaseOut(float t, int power)
+        static float EaseOut(float t, int power)
         {
             int sign = power % 2 == 0 ? -1 : 1;
             return (sign * (Mathf.Pow(t - 1, power) + sign));
         }
 
-        private static float EaseInOut(float t, int power)
+        static float EaseInOut(float t, int power)
         {
             t *= 2.0f;
             if (t < 1) {
