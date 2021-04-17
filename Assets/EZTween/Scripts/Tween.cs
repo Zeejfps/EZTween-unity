@@ -7,8 +7,13 @@ namespace ENVCode.EZTween
         #region Properties
         public float Progress
         {
-            get;
-            private set;
+            get => m_Progress;
+            private set
+            {
+                m_Progress = value;
+                if (m_Progress > 1f)
+                    m_Progress = 1f;
+            }
         }
 
         float _duration;
@@ -37,11 +42,13 @@ namespace ENVCode.EZTween
             get { return !Playing && !Stopped; }
         }
 
-        private Func<float, float> m_InterpolationFunc;
-        private Action<float> m_OnUpdate;
-        private Action m_OnPause;
-        private Action m_OnComplete;
-        private Action m_OnStop;
+        Func<float, float> m_InterpolationFunc;
+        Action<float> m_OnUpdate;
+        Action m_OnPause;
+        Action m_OnComplete;
+        Action m_OnStop;
+        float m_Progress;
+        float m_Time;
         #endregion
 
         #region Constructor
@@ -56,6 +63,7 @@ namespace ENVCode.EZTween
         #region Public Methods
         public void Restart()
         {
+            m_Time = 0f;
             Progress = 0f;
             Playing = false;
             Play();
@@ -85,8 +93,7 @@ namespace ENVCode.EZTween
                 return;
 
             Playing = false;
-            if (m_OnPause != null)
-                m_OnPause.Invoke();
+            m_OnPause?.Invoke();
         }
 
         public void Stop()
@@ -96,8 +103,7 @@ namespace ENVCode.EZTween
 
             Progress = 1f;
             Playing = false;
-            if (m_OnStop != null)
-                m_OnStop.Invoke();
+            m_OnStop?.Invoke();
         }
 
         public Tween OnPause(Action onPause)
@@ -124,15 +130,13 @@ namespace ENVCode.EZTween
             if (!Playing)
                 return;
 
-            Progress += dt;
-            float value = m_InterpolationFunc.Invoke(Progress / Duration);
-            m_OnUpdate.Invoke(value);
-            if (Progress >= Duration)
+            m_Time += dt;
+            Progress = m_Time / Duration;
+            var t = m_InterpolationFunc.Invoke(Progress);
+            m_OnUpdate.Invoke(t);
+            if (m_Time >= Duration)
             {
-                if (m_OnComplete != null)
-                {
-                    m_OnComplete.Invoke();
-                }
+                m_OnComplete?.Invoke();
                 Stop();
             }
         }
