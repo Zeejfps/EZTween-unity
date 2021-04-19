@@ -42,7 +42,7 @@ namespace ENVCode.EZTween
             get { return !IsPlaying && !IsStopped; }
         }
 
-        Func<float, float> m_InterpolationFunc;
+        Func<float, float> m_EasingFunc;
         Action<float> m_OnUpdate;
         Action m_OnPause;
         Action m_OnComplete;
@@ -52,9 +52,9 @@ namespace ENVCode.EZTween
         #endregion
 
         #region Constructor
-        public Tween(Func<float, float> interpolationFunc, float duration, Action<float> onUpdate)
+        public Tween(Func<float, float> easingFunc, float duration, Action<float> onUpdate)
         {
-            m_InterpolationFunc = interpolationFunc;
+            m_EasingFunc = easingFunc;
             m_OnUpdate = onUpdate;
             Duration = duration;
         }
@@ -131,7 +131,7 @@ namespace ENVCode.EZTween
 
             m_Time += dt;
             Progress = m_Time / Duration;
-            var t = m_InterpolationFunc.Invoke(Progress);
+            var t = m_EasingFunc.Invoke(Progress);
             m_OnUpdate.Invoke(t);
             if (m_Time >= Duration)
             {
