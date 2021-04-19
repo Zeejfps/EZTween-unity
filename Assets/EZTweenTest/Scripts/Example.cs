@@ -51,6 +51,6 @@ public class Example : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-            m_OpenTween.Restart();
+            m_OpenTween.Play();
     }
 }

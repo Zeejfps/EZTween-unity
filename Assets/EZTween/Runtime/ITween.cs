@@ -4,6 +4,6 @@
     {
         void Tick(float deltaTime);
         bool IsPlaying { get; }
-        void Stop();
+        void Pause();
     }
 }

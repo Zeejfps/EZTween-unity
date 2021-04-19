@@ -51,9 +51,15 @@ namespace ENVCode.EZTween
         /// <param name="tween"></param>
         public static void Play(object key, ITween tween)
         {
+            if (key == null)
+            {
+                Play(tween);
+                return;
+            }
+
             if (Instance.m_TweenDict.ContainsKey(key)) {
                 ITween prev = Instance.m_TweenDict[key];
-                if (prev.IsPlaying) prev.Stop();
+                if (prev.IsPlaying) prev.Pause();
                 Instance.m_TweenDict[key] = tween;
             }
             else {

@@ -26,27 +26,12 @@ namespace ENVCode.EZTween
             }
         }
 
-        public bool IsPlaying
-        {
-            get;
-            private set;
-        }
-
-        public bool IsStopped
-        {
-            get { return !IsPlaying; }
-        }
-
-        public bool Paused
-        {
-            get { return !IsPlaying && !IsStopped; }
-        }
-
+        public bool IsPlaying { get; private set; }
+        
         Func<float, float> m_EasingFunc;
         Action<float> m_OnUpdate;
-        Action m_OnPause;
         Action m_OnComplete;
-        Action m_OnStop;
+        Action m_OnPause;
         float m_Progress;
         float m_Time;
         #endregion
@@ -61,28 +46,15 @@ namespace ENVCode.EZTween
         #endregion
 
         #region Public Methods
-        public void Restart()
-        {
-            m_Time = 0f;
-            Progress = 0f;
-            IsPlaying = false;
-            Play();
-        }
 
-        public void Play()
+        public void Play(object key = null)
         {
             if (IsPlaying)
-                return;
-
-            IsPlaying = true;
-            EZTween.Play(this);
-        }
-
-        public void Play(object key)
-        {
-            if (IsPlaying)
-                return;
-
+            {
+                m_Time = 0;
+                Progress = 0;
+            }
+            
             IsPlaying = true;
             EZTween.Play(key, this);
         }
@@ -96,16 +68,6 @@ namespace ENVCode.EZTween
             m_OnPause?.Invoke();
         }
 
-        public void Stop()
-        {
-            if (!IsPlaying)
-                return;
-
-            Progress = 1f;
-            IsPlaying = false;
-            m_OnStop?.Invoke();
-        }
-
         public Tween OnPause(Action onPause)
         {
             m_OnPause = onPause;
@@ -115,12 +77,6 @@ namespace ENVCode.EZTween
         public Tween OnComplete(Action onComplete)
         {
             m_OnComplete = onComplete;
-            return this;
-        }
-
-        public Tween OnStop(Action onStop)
-        {
-            m_OnStop = onStop;
             return this;
         }
         
@@ -135,8 +91,11 @@ namespace ENVCode.EZTween
             m_OnUpdate.Invoke(t);
             if (m_Time >= Duration)
             {
+                IsPlaying = false;
+                m_OnPause?.Invoke();
                 m_OnComplete?.Invoke();
-                Stop();
+                Progress = 0;
+                m_Time = 0;
             }
         }
         
