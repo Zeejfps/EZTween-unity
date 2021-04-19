@@ -79,10 +79,11 @@ namespace ENVCode.EZTween
 
             // Loop over all the tweens in our set and update them
             foreach (ITween tween in m_TweenList) {
-                tween.Tick(Time.deltaTime);
-                if (tween.IsStopped) {
+                if (!tween.IsPlaying) {
                     m_TweenSet.Remove(tween);
+                    continue;
                 }
+                tween.Tick(Time.deltaTime);
             }
         }
         #endregion

@@ -4,7 +4,6 @@
     {
         void Tick(float deltaTime);
         bool IsPlaying { get; }
-        bool IsStopped { get; }
         void Stop();
     }
 }
