@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ENVCode.EZTween
 {
-    public partial class EZTween
+    public partial class Tween
     {
         const float k_HalfPI = Mathf.PI * 0.5f;
 

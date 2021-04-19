@@ -2,7 +2,7 @@
 
 namespace ENVCode.EZTween
 {
-    public class Tween : ITween
+    public partial class Tween : ITween
     {
         #region Properties
         public float Progress

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ENVCode.EZTween
 {
-    public partial class EZTween : MonoBehaviour
+    public class EZTween : MonoBehaviour
     {
         #region Static
         /// <summary>
