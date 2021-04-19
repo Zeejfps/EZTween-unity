@@ -20,26 +20,26 @@ EZTween provides several built-in interpolation functions that can be utilized.
 
 ```csharp
 // A Quadratic In Out Interpolation
-EZTween.QuadraticInOut(1f, t => {
+Tween.QuadraticInOut(1f, t => {
     pos = Vector3.Lerp(startPos, endPos, t);
 }).Play();
 
 // Or a simple Linear Interpolation
-EZTween.Linear(1f, t => {
+Tween.Linear(1f, t => {
     pos = Vector3.Lerp(startPos, endPos, t);
 }).Play();
 ```
 
 A Tween can also be created and saved for later use and re-use.
 ```csharp
-Tween open = EZTween.CubicInOut(0.5f, t => {
+Tween open = Tween.CubicInOut(0.5f, t => {
     // Do something here
 });
 ```
 
 Moreover, some callback functions can be added to a Tween.
 ```csharp
-Tween tween = EZTween.Linear(2f, t => {
+Tween tween = Tween.Linear(2f, t => {
     // Tween code here
 }).OnComplete(() => {
     // What to do when complete
@@ -51,7 +51,7 @@ Also, a Tween contains multiple useful functions.
 open.Play();
 open.Restart();
 open.Pause();
-open.stop();
+open.Stop();
 ```
 
 You can use a custom interpolation function by creating a Tween yourself, then telling EZTween to Play it.
@@ -91,7 +91,7 @@ public class Example : MonoBehaviour
     {
         Vector2 startPos = RectTransform.anchoredPosition;
         Vector2 endPos = new Vector2(startPos.x, startPos.y + 300f);
-        m_OpenTween = EZTween.QuadraticInOut(m_MoveDuration, t => {
+        m_OpenTween = Tween.QuadraticInOut(m_MoveDuration, t => {
             RectTransform.anchoredPosition = Vector2.Lerp(startPos, endPos, t);
         }).OnComplete(() => {
             RectTransform.anchoredPosition = startPos;
