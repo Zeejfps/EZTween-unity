@@ -26,20 +26,20 @@ namespace ENVCode.EZTween
             }
         }
 
-        public bool Playing
+        public bool IsPlaying
         {
             get;
             private set;
         }
 
-        public bool Stopped
+        public bool IsStopped
         {
-            get { return !Playing; }
+            get { return !IsPlaying; }
         }
 
         public bool Paused
         {
-            get { return !Playing && !Stopped; }
+            get { return !IsPlaying && !IsStopped; }
         }
 
         Func<float, float> m_InterpolationFunc;
@@ -65,44 +65,44 @@ namespace ENVCode.EZTween
         {
             m_Time = 0f;
             Progress = 0f;
-            Playing = false;
+            IsPlaying = false;
             Play();
         }
 
         public void Play()
         {
-            if (Playing)
+            if (IsPlaying)
                 return;
 
-            Playing = true;
+            IsPlaying = true;
             EZTween.Play(this);
         }
 
         public void Play(object key)
         {
-            if (Playing)
+            if (IsPlaying)
                 return;
 
-            Playing = true;
+            IsPlaying = true;
             EZTween.Play(key, this);
         }
 
         public void Pause()
         {
-            if (!Playing)
+            if (!IsPlaying)
                 return;
 
-            Playing = false;
+            IsPlaying = false;
             m_OnPause?.Invoke();
         }
 
         public void Stop()
         {
-            if (!Playing)
+            if (!IsPlaying)
                 return;
 
             Progress = 1f;
-            Playing = false;
+            IsPlaying = false;
             m_OnStop?.Invoke();
         }
 
@@ -127,7 +127,7 @@ namespace ENVCode.EZTween
 
         public void Tick(float dt)
         {
-            if (!Playing)
+            if (!IsPlaying)
                 return;
 
             m_Time += dt;

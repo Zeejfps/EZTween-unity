@@ -3,8 +3,8 @@
     public interface ITween
     {
         void Tick(float deltaTime);
-        bool Playing { get; }
-        bool Stopped { get; }
+        bool IsPlaying { get; }
+        bool IsStopped { get; }
         void Stop();
     }
 }

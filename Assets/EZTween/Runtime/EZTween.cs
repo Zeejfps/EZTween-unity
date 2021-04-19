@@ -53,7 +53,7 @@ namespace ENVCode.EZTween
         {
             if (Instance.m_TweenDict.ContainsKey(key)) {
                 ITween prev = Instance.m_TweenDict[key];
-                if (prev.Playing) prev.Stop();
+                if (prev.IsPlaying) prev.Stop();
                 Instance.m_TweenDict[key] = tween;
             }
             else {
@@ -80,7 +80,7 @@ namespace ENVCode.EZTween
             // Loop over all the tweens in our set and update them
             foreach (ITween tween in m_TweenList) {
                 tween.Tick(Time.deltaTime);
-                if (tween.Stopped) {
+                if (tween.IsStopped) {
                     m_TweenSet.Remove(tween);
                 }
             }
