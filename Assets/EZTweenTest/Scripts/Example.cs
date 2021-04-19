@@ -38,7 +38,7 @@ public class Example : MonoBehaviour
         });
         //*/
 
-        m_OpenTween = EZTween.CubicOut(m_MoveDuration, t =>
+        m_OpenTween = Tween.CubicOut(m_MoveDuration, t =>
         {
             // On every update we lerp our position based on the t
             RectTransform.anchoredPosition = Vector2.LerpUnclamped(startPos, endPos, t);

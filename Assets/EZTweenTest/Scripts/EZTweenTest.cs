@@ -3,7 +3,7 @@ using ENVCode.EZTween;
 
 public class EZTweenTest : MonoBehaviour
 {
-    Tween openTween = EZTween.CubicInOut(0.5f, t => {
+    Tween openTween = Tween.CubicInOut(0.5f, t => {
 
     }).OnComplete(() => {
         //Debug.Log("Open Tween Completed");
@@ -18,7 +18,7 @@ public class EZTweenTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Tween tween = EZTween.Linear(2f, t => {
+        Tween tween = Tween.Linear(2f, t => {
 
         }).OnComplete(() => {
             //Debug.Log("Done!");
@@ -41,7 +41,7 @@ public class EZTweenTest : MonoBehaviour
             //Debug.Log("Open Tween Playing");
             openTween.Play();
 
-            EZTween.QuadraticInOut(10f, t => {
+            Tween.QuadraticInOut(10f, t => {
                 
             }).Play("ID");
         }
