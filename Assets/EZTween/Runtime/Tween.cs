@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace ENVCode.EZTween
 {
@@ -8,22 +9,14 @@ namespace ENVCode.EZTween
         public float Progress
         {
             get => m_Progress;
-            private set
-            {
-                m_Progress = value;
-                if (m_Progress > 1f)
-                    m_Progress = 1f;
-            }
+            set => m_Progress = Mathf.Clamp01(value);
         }
 
         float _duration;
         public float Duration
         {
-            get { return _duration; }
-            private set
-            {
-                _duration = Math.Max(value, 0);
-            }
+            get => _duration;
+            set => _duration = Math.Max(value, 0);
         }
 
         public bool IsPlaying { get; private set; }
@@ -47,6 +40,11 @@ namespace ENVCode.EZTween
 
         #region Public Methods
 
+        /// <summary>
+        /// Starts playback of the tween.
+        /// If the tween is already playing the playback is restarted.
+        /// </summary>
+        /// <param name="key">Optional</param>
         public void Play(object key = null)
         {
             if (IsPlaying)
@@ -57,9 +55,12 @@ namespace ENVCode.EZTween
             
             IsPlaying = true;
             EZTween.Play(key, this);
-            OnStart();
+            OnPlay();
         }
 
+        /// <summary>
+        /// Pauses the playback of the tween.
+        /// </summary>
         public void Pause()
         {
             if (!IsPlaying)
@@ -93,7 +94,6 @@ namespace ENVCode.EZTween
             if (m_Time >= Duration)
             {
                 IsPlaying = false;
-                OnPause();
                 OnComplete();
             }
         }
@@ -102,7 +102,7 @@ namespace ENVCode.EZTween
 
         #region Lifecycle Methods
         
-        protected virtual void OnStart()
+        protected virtual void OnPlay()
         {
             
         }
