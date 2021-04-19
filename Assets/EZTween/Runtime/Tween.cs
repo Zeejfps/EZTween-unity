@@ -123,8 +123,7 @@ namespace ENVCode.EZTween
             m_OnStop = onStop;
             return this;
         }
-        #endregion
-
+        
         public void Tick(float dt)
         {
             if (!IsPlaying)
@@ -140,5 +139,7 @@ namespace ENVCode.EZTween
                 Stop();
             }
         }
+        
+        #endregion
     }
 }
