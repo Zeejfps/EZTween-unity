@@ -2,7 +2,7 @@
 
 namespace ENVCode.EZTween
 {
-    public class Tween
+    public class Tween : ITween
     {
         #region Properties
         public float Progress
@@ -125,7 +125,7 @@ namespace ENVCode.EZTween
         }
         #endregion
 
-        internal void Tick(float dt)
+        public void Tick(float dt)
         {
             if (!Playing)
                 return;

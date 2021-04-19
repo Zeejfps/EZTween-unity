@@ -38,7 +38,7 @@ namespace ENVCode.EZTween
         /// The tween is added to a HashSet and then updated every frame.
         /// </summary>
         /// <param name="tween"></param>
-        public static void Play(Tween tween)
+        public static void Play(ITween tween)
         {
             Instance.m_TweenSet.Add(tween);
         }
@@ -49,10 +49,10 @@ namespace ENVCode.EZTween
         /// </summary>
         /// <param name="key"></param>
         /// <param name="tween"></param>
-        public static void Play(object key, Tween tween)
+        public static void Play(object key, ITween tween)
         {
             if (Instance.m_TweenDict.ContainsKey(key)) {
-                Tween prev = Instance.m_TweenDict[key];
+                ITween prev = Instance.m_TweenDict[key];
                 if (prev.Playing) prev.Stop();
                 Instance.m_TweenDict[key] = tween;
             }
@@ -64,9 +64,9 @@ namespace ENVCode.EZTween
         #endregion
 
         #region Properties
-        List<Tween> m_TweenList = new List<Tween>();
-        HashSet<Tween> m_TweenSet = new HashSet<Tween>();
-        Dictionary<object, Tween> m_TweenDict = new Dictionary<object, Tween>();
+        List<ITween> m_TweenList = new List<ITween>();
+        HashSet<ITween> m_TweenSet = new HashSet<ITween>();
+        Dictionary<object, ITween> m_TweenDict = new Dictionary<object, ITween>();
         #endregion
 
         #region Unity Callbacks
@@ -78,7 +78,7 @@ namespace ENVCode.EZTween
             m_TweenList.AddRange(m_TweenSet);
 
             // Loop over all the tweens in our set and update them
-            foreach (Tween tween in m_TweenList) {
+            foreach (ITween tween in m_TweenList) {
                 tween.Tick(Time.deltaTime);
                 if (tween.Stopped) {
                     m_TweenSet.Remove(tween);
