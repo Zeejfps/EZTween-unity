@@ -57,6 +57,7 @@ namespace ENVCode.EZTween
             
             IsPlaying = true;
             EZTween.Play(key, this);
+            OnStart();
         }
 
         public void Pause()
@@ -65,7 +66,7 @@ namespace ENVCode.EZTween
                 return;
 
             IsPlaying = false;
-            m_OnPause?.Invoke();
+            OnPause();
         }
 
         public Tween OnPause(Action onPause)
@@ -88,15 +89,39 @@ namespace ENVCode.EZTween
             m_Time += dt;
             Progress = m_Time / Duration;
             var t = m_EasingFunc.Invoke(Progress);
-            m_OnUpdate.Invoke(t);
+            OnUpdate(t);
             if (m_Time >= Duration)
             {
                 IsPlaying = false;
-                m_OnPause?.Invoke();
-                m_OnComplete?.Invoke();
-                Progress = 0;
-                m_Time = 0;
+                OnPause();
+                OnComplete();
             }
+        }
+        
+        #endregion
+
+        #region Lifecycle Methods
+        
+        protected virtual void OnStart()
+        {
+            
+        }
+        
+        protected virtual void OnUpdate(float progress)
+        {
+            m_OnUpdate.Invoke(progress);
+        }
+
+        protected virtual void OnPause()
+        {
+            m_OnPause?.Invoke();
+        }
+        
+        protected virtual void OnComplete()
+        {
+            m_OnComplete?.Invoke();
+            Progress = 0;
+            m_Time = 0;
         }
         
         #endregion
